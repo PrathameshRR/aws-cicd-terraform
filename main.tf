@@ -21,12 +21,6 @@ module "s3" {
   bucket_name = "${var.project_name}-${local.environment}-artifacts"
 }
 
-module "iam" {
-  source              = "./modules/iam"
-  project_name        = var.project_name
-  artifact_bucket_arn = module.s3.bucket_arn
-}
-
 module "codecommit" {
   source          = "./modules/codecommit"
   repository_name = "${var.project_name}-${local.environment}"
@@ -36,7 +30,7 @@ module "codecommit" {
 module "codebuild" {
   source         = "./modules/codebuild"
   project_name   = "${var.project_name}-${local.environment}"
-  iam_role_arn   = module.iam.codebuild_role_arn
+  iam_role_arn   = var.existing_codebuild_role_arn
   s3_bucket_id   = module.s3.bucket_id
 }
 
@@ -52,7 +46,7 @@ module "codedeploy" {
   source                = "./modules/codedeploy"
   app_name              = var.codedeploy_app_name
   deployment_group_name = var.codedeploy_group_name
-  service_role_arn      = module.iam.codedeploy_role_arn
+  service_role_arn      = var.existing_codedeploy_role_arn
   environment           = local.environment
   project_name          = var.project_name
 }
@@ -60,7 +54,7 @@ module "codedeploy" {
 module "codepipeline" {
   source                 = "./modules/codepipeline"
   project_name           = "${var.project_name}-${local.environment}"
-  iam_role_arn           = module.iam.codepipeline_role_arn
+  iam_role_arn           = var.existing_codepipeline_role_arn
   s3_bucket_id           = module.s3.bucket_id
   repository_name        = module.codecommit.repository_name
   branch_name            = var.branch_name
@@ -78,8 +72,8 @@ module "sns" {
 }
 
 module "cloudwatch" {
-  source       = "./modules/cloudwatch"
+  source        = "./modules/cloudwatch"
   project_name = var.project_name
-  instance_id  = module.ec2.instance_id
+  instance_id   = module.ec2.instance_id
   sns_topic_arn = module.sns.topic_arn
 }

@@ -45,3 +45,18 @@ variable "ami_id" {
   type        = string
   default     = "ami-0c55b159cbfafe1f0"  # This is an example AMI ID, replace with an appropriate one for your region
 }
+
+variable "existing_codebuild_role_arn" {
+  description = "ARN of an existing IAM role for CodeBuild"
+  type        = string
+}
+
+variable "existing_codedeploy_role_arn" {
+  description = "ARN of an existing IAM role for CodeDeploy"
+  type        = string
+}
+
+variable "existing_codepipeline_role_arn" {
+  description = "ARN of an existing IAM role for CodePipeline"
+  type        = string
+}

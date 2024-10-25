@@ -45,3 +45,12 @@
 ## Cleaning Up
 
 To avoid incurring future charges, remember to destroy the resources when you're done:
+
+## Additional Setup
+
+3. Obtain the ARNs for existing IAM roles:
+   - CodeBuild role ARN
+   - CodeDeploy role ARN
+   - CodePipeline role ARN
+
+   You'll need to provide these when applying the Terraform configuration.
