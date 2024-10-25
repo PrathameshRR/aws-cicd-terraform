@@ -8,41 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region                      = var.aws_region
-  access_key                  = "test"
-  secret_key                  = "test"
-  skip_credentials_validation = true
-  skip_metadata_api_check     = true
-  skip_requesting_account_id  = true
-
-  endpoints {
-    apigateway     = "http://localhost:4566"
-    cloudformation = "http://localhost:4566"
-    cloudwatch     = "http://localhost:4566"
-    dynamodb       = "http://localhost:4566"
-    ec2            = "http://localhost:4566"
-    es             = "http://localhost:4566"
-    elasticache    = "http://localhost:4566"
-    firehose       = "http://localhost:4566"
-    iam            = "http://localhost:4566"
-    kinesis        = "http://localhost:4566"
-    lambda         = "http://localhost:4566"
-    rds            = "http://localhost:4566"
-    redshift       = "http://localhost:4566"
-    route53        = "http://localhost:4566"
-    s3             = "http://localhost:4566"
-    secretsmanager = "http://localhost:4566"
-    ses            = "http://localhost:4566"
-    sns            = "http://localhost:4566"
-    sqs            = "http://localhost:4566"
-    ssm            = "http://localhost:4566"
-    stepfunctions  = "http://localhost:4566"
-    sts            = "http://localhost:4566"
-    codecommit     = "http://localhost:4566"
-    codebuild      = "http://localhost:4566"
-    codepipeline   = "http://localhost:4566"
-    codedeploy     = "http://localhost:4566"
-  }
+  region = var.aws_region
 }
 
 locals {
@@ -74,12 +40,21 @@ module "codebuild" {
   s3_bucket_id   = module.s3.bucket_id
 }
 
+module "ec2" {
+  source        = "./modules/ec2"
+  project_name  = var.project_name
+  instance_type = var.instance_type
+  environment   = local.environment
+  ami_id        = var.ami_id
+}
+
 module "codedeploy" {
   source                = "./modules/codedeploy"
   app_name              = var.codedeploy_app_name
   deployment_group_name = var.codedeploy_group_name
   service_role_arn      = module.iam.codedeploy_role_arn
   environment           = local.environment
+  project_name          = var.project_name
 }
 
 module "codepipeline" {
@@ -92,7 +67,7 @@ module "codepipeline" {
   codebuild_project_name = module.codebuild.project_name
   codedeploy_app_name    = module.codedeploy.app_name
   codedeploy_group_name  = module.codedeploy.deployment_group_name
-  sns_topic_arn          = module.sns.topic_arn  # Add this line
+  sns_topic_arn          = module.sns.topic_arn
 }
 
 # Add this with the other module definitions
@@ -100,4 +75,11 @@ module "codepipeline" {
 module "sns" {
   source       = "./modules/sns"
   project_name = var.project_name
+}
+
+module "cloudwatch" {
+  source       = "./modules/cloudwatch"
+  project_name = var.project_name
+  instance_id  = module.ec2.instance_id
+  sns_topic_arn = module.sns.topic_arn
 }

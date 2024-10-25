@@ -1,43 +1,47 @@
-# AWS CI/CD Pipeline with Terraform and LocalStack
+# AWS CI/CD Pipeline with Terraform
+
+## Prerequisites
+
+- AWS CLI installed and configured
+- Terraform installed
+- An AWS account with necessary permissions
 
 ## Setup Instructions
 
-1. Create and activate a virtual environment:
+1. Clone this repository:
    ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
-
-2. Install required packages:
-   ```
-   pip install awscli-local localstack
+   git clone <repository-url>
+   cd <repository-directory>
    ```
 
-3. Start LocalStack:
+2. Initialize Terraform:
    ```
-   SERVICES=s3,iam,codecommit,codebuild,codepipeline localstack start
-   ```
-
-4. Set up your AWS CLI to work with LocalStack:
-   ```
-   export AWS_ACCESS_KEY_ID=test
-   export AWS_SECRET_ACCESS_KEY=test
-   export AWS_DEFAULT_REGION=us-east-1
+   terraform init
    ```
 
-5. Ensure you have a `buildspec.yml` file in your source repository with the necessary build commands.
+3. Review and modify the `variables.tf` file to set your desired values.
 
-6. Run `terraform init` and `terraform apply` to create the infrastructure in LocalStack.
+4. Plan the Terraform execution:
+   ```
+   terraform plan
+   ```
+
+5. Apply the Terraform configuration:
+   ```
+   terraform apply
+   ```
+
+6. After successful application, Terraform will output important information like the CodeCommit repository URL. Make note of these outputs.
+
+7. Push your application code to the newly created CodeCommit repository.
+
+8. The CI/CD pipeline will automatically trigger on new commits to the main branch.
 
 ## Important Files
 
 - `buildspec.yml`: This file should be in your source code repository and contain the build instructions for CodeBuild.
+- `appspec.yml`: This file should be in your source code repository and contain the deployment instructions for CodeDeploy.
 
-## Notes
+## Cleaning Up
 
-- This setup is for local development and testing purposes using LocalStack.
-- Some AWS features may not be fully supported or may behave differently in LocalStack.
-- Remember to deactivate the virtual environment when you're done:
-  ```
-  deactivate
-  ```
+To avoid incurring future charges, remember to destroy the resources when you're done:

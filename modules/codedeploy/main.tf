@@ -14,6 +14,15 @@ resource "aws_codedeploy_deployment_group" "deployment_group" {
       value = var.environment
     }
   }
+
+  auto_rollback_configuration {
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
+  }
+
+  alarm_configuration {
+    alarms = ["${var.project_name}-alarm"]
+  }
 }
 
 output "app_name" {
