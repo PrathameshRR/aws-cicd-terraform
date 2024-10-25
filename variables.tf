@@ -49,14 +49,17 @@ variable "ami_id" {
 variable "existing_codebuild_role_arn" {
   description = "ARN of an existing IAM role for CodeBuild"
   type        = string
+  default     = "arn:aws:iam::637423644535:role/my-cicd-project-codebuild-role"
 }
 
 variable "existing_codedeploy_role_arn" {
   description = "ARN of an existing IAM role for CodeDeploy"
   type        = string
+  default     = "arn:aws:iam::637423644535:role/my-cicd-project-codedeploy-role"
 }
 
 variable "existing_codepipeline_role_arn" {
   description = "ARN of an existing IAM role for CodePipeline"
   type        = string
+  default     = "arn:aws:iam::637423644535:role/my-cicd-project-codepipeline-role"
 }
