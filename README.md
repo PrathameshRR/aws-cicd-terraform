@@ -48,9 +48,13 @@ To avoid incurring future charges, remember to destroy the resources when you're
 
 ## Additional Setup
 
-3. Obtain the ARNs for existing IAM roles:
-   - CodeBuild role ARN
-   - CodeDeploy role ARN
-   - CodePipeline role ARN
+3. Set the ARNs for existing IAM roles:
+   You can set these in the `variables.tf` file or pass them as variables when applying the Terraform configuration:
+   ```
+   terraform apply \
+     -var="existing_codebuild_role_arn=arn:aws:iam::ACCOUNT_ID:role/codebuild-role" \
+     -var="existing_codedeploy_role_arn=arn:aws:iam::ACCOUNT_ID:role/codedeploy-role" \
+     -var="existing_codepipeline_role_arn=arn:aws:iam::ACCOUNT_ID:role/codepipeline-role"
+   ```
 
-   You'll need to provide these when applying the Terraform configuration.
+   Replace `ACCOUNT_ID` with your AWS account ID and ensure the role names are correct.
