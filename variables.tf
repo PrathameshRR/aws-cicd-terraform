@@ -43,7 +43,7 @@ variable "instance_type" {
 variable "ami_id" {
   description = "The AMI ID for the EC2 instance"
   type        = string
-  default     = "ami-0c55b159cbfafe1f0"  # This is an example AMI ID, replace with an appropriate one for your region
+  default     = "ami-01e3c4a339a264cc9"  # This is an Amazon Linux 2 AMI in us-west-2. Please verify and update if necessary.
 }
 
 variable "existing_codebuild_role_arn" {

@@ -4,7 +4,9 @@
 
 - AWS CLI installed and configured
 - Terraform installed
-- An AWS account with necessary permissions
+- An AWS account with necessary permissions, including:
+  - `iam:PassRole` permission for the CodeBuild, CodeDeploy, and CodePipeline service roles
+  - Permissions to create and manage resources in S3, CodeCommit, CodeBuild, CodeDeploy, CodePipeline, EC2, and CloudWatch
 
 ## Setup Instructions
 
